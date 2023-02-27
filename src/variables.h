@@ -10,7 +10,6 @@ int currentVector;
 int currectIntersection;
 int shapeCode[maxVectors];
 
-const float m_pi = 3.14159265358979323846;
 float shapeArea = 0;
 
 const char* shapeName;
