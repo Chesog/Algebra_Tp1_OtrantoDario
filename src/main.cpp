@@ -99,10 +99,17 @@ void Draw()
 	EndDrawing();
 }
 
+/// <summary>
+/// Returns the angle between three points
+/// </summary>
+/// <param name="v1"></param>
+/// <param name="v2"></param>
+/// <param name="center"></param>
+/// <returns></returns>
 float GetVectorsAngle(Vector2 v1, Vector2 v2, Vector2 center)
 {
 
-http://phrogz.net/angle-between-three-points
+    http://phrogz.net/angle-between-three-points // Formula para sacar el angulo entre tres puntos
 
 	float a = powf(center.x - v1.x, 2) + powf(center.y - v1.y, 2);
 	float b = powf(center.x - v2.x, 2) + powf(center.y - v2.y, 2);
@@ -110,9 +117,15 @@ http://phrogz.net/angle-between-three-points
 	return acosf((a + b - c) / sqrtf(4 * a * b));
 }
 
+/// <summary>
+/// Returns the distance between 2 points using pitagoras
+/// </summary>
+/// <param name="v1"></param>
+/// <param name="v2"></param>
+/// <returns></returns>
 float GetVectorsDistance(Vector2 v1, Vector2 v2)
 {
-https://en.wikipedia.org/wiki/Euclidean_distance
+    https://en.wikipedia.org/wiki/Euclidean_distance // Pitagoras
 
 	float distX = v1.x - v2.x;
 	float distY = v1.y - v2.y;
@@ -144,6 +157,13 @@ void DrawCenteredText(const char* text, Vector2 pos, int fontSize, Color color)
 	DrawText(text, (pos.x) - (textWide * .5), (pos.y) - (fontSize * .5), fontSize, color);
 }
 
+/// <summary>
+/// Checks if value is in the arr array
+/// </summary>
+/// <param name="arr"></param>
+/// <param name="size"></param>
+/// <param name="value"></param>
+/// <returns></returns>
 bool IsInArray(int arr[], int size, int value)
 {
 	for (int i = 0; i < size; i++)
@@ -155,7 +175,11 @@ bool IsInArray(int arr[], int size, int value)
 	}
 	return false;
 }
-
+/// <summary>
+/// BubbleSort the param array
+/// </summary>
+/// <param name="arr"></param>
+/// <param name="size"></param>
 void BubbleSort(int arr[], int size)
 {
 	int aux;
@@ -259,7 +283,7 @@ void FindIntersections()
 
 float CalculateTriangleArea(float a, float b, float c)
 {
-	https://en.wikipedia.org/wiki/Heron%27s_formula
+	https://en.wikipedia.org/wiki/Heron%27s_formula // Utilizamos la formula de heron
 
 	float s = ((a + b + c) / 2);
 	return sqrt(s * ((s - a) * (s - b) * (s - c)));
@@ -267,10 +291,10 @@ float CalculateTriangleArea(float a, float b, float c)
 
 void FindQuadrilateral(int intersects[])
 {
-	int main = 0;
-	int parents[2] = { 0, 0 };
+	int main = 0; // Agarramos una insterseccion cualquiera, en este caso la 0.
+	int parents[2] = { 0, 0 }; // Esa interseccion va a tener si o si 2 intersecciones parientes.
 	int currentParent = 0;
-
+	// Buscamos quienes son esos parientes y los asignamos a parents.
 	for (int i = 1; i < currectIntersection; i++)
 	{
 		if (intersections[i].lines[0] == intersections[main].lines[0] ||
@@ -282,18 +306,18 @@ void FindQuadrilateral(int intersects[])
 			currentParent++;
 		}
 	}
-	int opposite = 0;
+	int opposite = 0; // Ya que hay un main y 2 parientes, tambien tiene que haber un opuesto.
 	for (int i = 0; i < currectIntersection; i++)
 	{
 		if (i != main && i != parents[0] && i != parents[1])
 			opposite = i;
 	}
-	
+	// Ahora que ya sabemos el main, sus parientes y el opuesto, calculamos los 4 angulos que componen al cuadrilatero.
 	float mainAng = RadiansToDegrees(GetVectorsAngle(intersections[parents[0]].pos, intersections[parents[1]].pos, intersections[main].pos));
 	float parent1Ang = RadiansToDegrees(GetVectorsAngle(intersections[opposite].pos, intersections[main].pos, intersections[parents[0]].pos));
 	float parent2Ang = RadiansToDegrees(GetVectorsAngle(intersections[opposite].pos, intersections[main].pos, intersections[parents[1]].pos));
 	float oppositeAng = RadiansToDegrees(GetVectorsAngle(intersections[parents[0]].pos, intersections[parents[1]].pos, intersections[opposite].pos));
-	
+	// Los angulos siempre se van a calular de su lado concavo. Si la suma de todos los angulos da 360 aprox, el cuadrilatero no es concavo.
 	if ((mainAng + parent1Ang + parent2Ang + oppositeAng) > 358)
 	{
 		cout << "It's a Convex Quadrilateral.\n";
@@ -303,7 +327,7 @@ void FindQuadrilateral(int intersects[])
 	}
 	else 
 	{
-		
+		// En caso de ser concavo, la suma de opuestos que sea mas alta define por donde cortar el cuadrilatero.
 		cout << "It's a Concave Quadrilateral.\n";
 		shapeName = "Concave Quadrilateral";
 		if (mainAng + oppositeAng > parent1Ang + parent2Ang)
@@ -322,11 +346,11 @@ void FindQuadrilateral(int intersects[])
 }
 
 void CalculateQuadrilateral() {
-	
-	int mainIntersects[2];
-	int parentIntersects[2] = { 0, 0 }; 
+	// Para calcular el area del cuadrilatero, lo vamos a dividir en 2 triangulos.
+	int mainIntersects[2]; // Para saber por donde cortarlo, primero necesitamos elegir intersecciones opuestas, estas se van a llamar main.
+	int parentIntersects[2] = { 0, 0 };  // Las otras dos intersecciones se van a llamar parents.
 	int parentCount = 0;
-	FindQuadrilateral(mainIntersects);
+	FindQuadrilateral(mainIntersects);  // Antes de cortar el cuadrilatero en 2 triangulos, necesitamos saber si es concavo o convexo y setear main acordemente.
 	for (int i = 0; i < currectIntersection; i++)
 	{
 		if (i != mainIntersects[0] && i != mainIntersects[1])
@@ -335,7 +359,7 @@ void CalculateQuadrilateral() {
 			parentCount++;
 		}
 	}
-
+	// Hipotenusa, la comparten ambos triangulos.
 	float a = GetVectorsDistance(intersections[mainIntersects[0]].pos, intersections[mainIntersects[1]].pos);
 
 	float b = GetVectorsDistance(intersections[mainIntersects[0]].pos, intersections[parentIntersects[0]].pos);
